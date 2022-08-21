@@ -88,7 +88,7 @@ def edit_item(user: User):
     if item.user != user:
         return flask.jsonify({"error": "You are not allowed to edit this item"}), 403
 
-@item_blueprint.route('/list', methods=['GET'])
+@item_blueprint.route('/list', methods=['POST'])
 def list_items():
     """
     [REST GET] /item/list
@@ -100,7 +100,7 @@ def list_items():
         offset (int): Offset of the items to return.
         sort (str): Sort order. [asc, desc]
         filter (list[int]): Filter by tags
-        order_by (str): Order by field. [expiry_in_days]
+        order_by (str): Order by field. [expiry_in_days, created_at]
 
     Example:
     {
@@ -119,4 +119,27 @@ def list_items():
         ]
     }
     """
-    request_data = flask.request.args
+    request_data = flask.request.get_json()
+    try:
+        length = int(request_data.get('length', 20))
+        offset = int(request_data.get('offset', 0))
+        sort = request_data.get('sort', 'asc')
+        filter = request_data.getlist('filter')
+        order_by = request_data.get('order_by', 'expiry_in_days')
+        if sort not in ['asc', 'desc']:
+            return jsonify({"error": "Invalid sort order"}), 400
+        if order_by not in ['expiry_in_days', 'created_at']:
+            return jsonify({"error": "Invalid order by field"}), 400
+        if filter is not None:
+            filter = [int(tag) for tag in filter]
+            items = Item.query.filter(Item.tags.any(Tag.id.in_(filter))).all()
+        else:
+            items = Item.query.all()
+        if sort == 'asc':
+            items = sorted(items, key=lambda item: getattr(item, order_by))
+        else:
+            items = sorted(items, key=lambda item: getattr(item, order_by), reverse=True)
+        items = items[offset:offset+length]
+        return jsonify(items), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
