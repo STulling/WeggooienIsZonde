@@ -1,0 +1,5 @@
+{
+    "SALT": "pikachu_is_obama_met_electriciteit",
+    "SQLALCHEMY_DATABASE_URI": "sqlite:///test.db",
+    "SQLALCHEMY_TRACK_MODIFICATIONS": false
+}

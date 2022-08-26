@@ -27,19 +27,20 @@ def get_categories():
         ]
     }
     """
-    # //TODO: Make language return in the same json format
     try:
         language = request.args.get('lang')
         if language is None:
             language = 'en'
         # select column name, name_en, name_nl from tag
         if language == 'en':
-            tags = Category.query.with_entities(Category.id, Category.name_en).all()
+            categories = Category.query.with_entities(Category.id, Category.name_en).all()
         elif language == 'nl':
-            tags = Category.query.with_entities(Category.id, Category.name_nl).all()
+            categories = Category.query.with_entities(Category.id, Category.name_nl).all()
         else:
             return jsonify({"error": "Invalid language"}), 400
-        return jsonify(tags), 200
+        # remove language postfix from name
+        category = [{'id': category[0], 'name': category[1]} for category in categories]
+        return jsonify(category), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
@@ -63,7 +64,6 @@ def get_tags():
         ]
     }
     """
-    # //TODO: Make language return in the same json format
     try:
         language = request.args.get('lang')
         if language is None:
@@ -75,6 +75,7 @@ def get_tags():
             tags = Tag.query.with_entities(Tag.id, Tag.name_nl).all()
         else:
             return jsonify({"error": "Invalid language"}), 400
+        tags = [{'id': tag[0], 'name': tag[1]} for tag in tags]
         return jsonify(tags), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

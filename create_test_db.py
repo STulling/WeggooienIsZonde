@@ -39,11 +39,12 @@ def sha256_base64(string):
     return b64encode(bytez)
 
 # Create Users
+from utils import hash_sha256
 from data import User
 users = [
-    User(username='admin', password=sha256_base64("admin"), role="admin", appartment=0),
-    User(username='Alice', password=sha256_base64("test123"), role="user", appartment=1),
-    User(username='Bob', password=sha256_base64("test123"), role="user", appartment=2),
+    User(username='admin', password=hash_sha256("admin"), role="admin", appartment=0),
+    User(username='Alice', password=hash_sha256("test123"), role="user", appartment=1),
+    User(username='Bob', password=hash_sha256("test123"), role="user", appartment=2),
 ]
 db.session.add_all(users)
 db.session.commit()

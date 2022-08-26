@@ -1,14 +1,16 @@
 from flask import Blueprint, Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from api import register_blueprints
+from json import load
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+for key, value in load(open('config.json')).items():
+    app.config[key] = value
+
 db = SQLAlchemy(app)
 
-register_blueprints(app)
-
 if __name__=="__main__":
+    register_blueprints(app)
     app.run()
