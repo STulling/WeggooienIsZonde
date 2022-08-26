@@ -15,7 +15,7 @@ class Item(db.Model):
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
     image = db.Column(db.LargeBinary, nullable=True)
-    expiry_in_days = db.Column(db.Integer, nullable=False)
+    thrown_away_at = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     tags = db.relationship("Tag", secondary=association_table, back_populates="items")
     category_id = db.Column(db.BigInteger, db.ForeignKey('category.id'), nullable=False, index=True)

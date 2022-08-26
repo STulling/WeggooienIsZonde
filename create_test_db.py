@@ -1,4 +1,5 @@
 # Delete previous test database and create new one
+from datetime import datetime, timedelta
 import os
 test_db = "test.db"
 if os.path.exists(test_db):
@@ -52,7 +53,7 @@ items = [
         user=User.query.filter_by(username='Alice').first(),
         description='900 grams of carrots', 
         image=None, 
-        expiry_in_days=5, 
+        thrown_away_at=datetime.now() + timedelta(days=5), 
         category=Category.query.filter_by(name_en='Food').first(), 
         tags=[Tag.query.filter_by(name_en='Vegetables').first()]
         ),
