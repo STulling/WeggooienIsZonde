@@ -19,6 +19,7 @@ class Item(db.Model):
     expiry_in_days = db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     tags = db.relationship("Tag", secondary=association_table, back_populates="items")
+    category = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
 
 class Tag(db.Model):
     __tablename__ = 'tag'
@@ -27,3 +28,11 @@ class Tag(db.Model):
     name_en = db.Column(db.String, nullable=False)
     name_nl = db.Column(db.String, nullable=False)
     items = db.relationship("Item", secondary=association_table, back_populates="tags")
+
+class Category(db.Model):
+    __tablename__ = 'tag'
+
+    id = db.Column(db.Integer, primary_key=True, nullable=False)
+    name_en = db.Column(db.String, nullable=False)
+    name_nl = db.Column(db.String, nullable=False)
+    items = db.relationship("Item", back_populates="category")
