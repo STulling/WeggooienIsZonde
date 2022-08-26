@@ -1,4 +1,4 @@
-from flask import Blueprint, Flask, jsonify
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from api import register_blueprints
 from json import load

@@ -6,11 +6,10 @@ if os.path.exists(test_db):
 
 # Create Tables
 from main import db
+from data import *
 db.create_all()
 
 # Create Categories
-from data import Category
-Category(name_en='Food', name_nl='Voedsel')
 categories = [
     Category(name_en='Food', name_nl='Voedsel'),
     Category(name_en='Clothes', name_nl='Kleding'),
@@ -22,7 +21,6 @@ db.session.add_all(categories)
 db.session.commit()
 
 # Create Tags
-from data import Tag
 tags = [
     Tag(name_en='Vegetables', name_nl='Groenten'),
     Tag(name_en='Fruits', name_nl='Fruit'),
@@ -40,7 +38,6 @@ def sha256_base64(string):
 
 # Create Users
 from utils import hash_sha256
-from data import User
 users = [
     User(username='admin', password=hash_sha256("admin"), role="admin", appartment=0),
     User(username='Alice', password=hash_sha256("test123"), role="user", appartment=1),
@@ -50,7 +47,6 @@ db.session.add_all(users)
 db.session.commit()
 
 # Create Items
-from data import Item
 items = [
     Item(name='Carrots', 
         user=User.query.filter_by(username='Alice').first(),
