@@ -80,7 +80,7 @@ def get_tags():
         return jsonify({"error": str(e)}), 500
 
 @item_blueprint.route('/add', methods=['POST'])
-@require_auth()
+@require_auth
 def add_item(user: User):
     """
     [REST POST] /item/add
@@ -116,7 +116,7 @@ def add_item(user: User):
         return jsonify({"error": str(e)}), 500
 
 @item_blueprint.route('/edit', methods=['POST'])
-@require_auth()
+@require_auth
 def edit_item(user: User):
     request_data = flask.request.get_json()
     item = Item.get(request_data['id'])

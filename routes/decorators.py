@@ -13,4 +13,5 @@ def require_auth(func, role: str = None):
         if role is not None and user.role != role:
             return flask.jsonify({"error": "Not authorized"}), 403
         return func(user, *args, **kwargs)
+    wrapper.__name__ = func.__name__
     return wrapper

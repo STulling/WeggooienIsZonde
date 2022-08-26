@@ -1,1 +1,1 @@
-from item import item_blueprint
+from .item import item_blueprint

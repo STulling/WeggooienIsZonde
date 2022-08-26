@@ -1,19 +1,14 @@
 from flask import Blueprint, Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from routes import item_blueprint
+from api import register_blueprints
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite://test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-api = Blueprint('api', __name__, url_prefix='/api')
+register_blueprints(app)
 
-@app.errorhandler(404)
-def normal404(e):
-    return jsonify({"error": "Not found"}), 404
-
-api.register_blueprint(item_blueprint)
-app.register_blueprint(api)
-
-app.run()
+if __name__=="__main__":
+    app.run()
